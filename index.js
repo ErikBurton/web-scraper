@@ -10,8 +10,20 @@ const url = 'https://www.camaro6.com/'
 axios(url)
     .then(response => {
         const html = response.data
-        console.log(html)
-    })
+        const $ = cheerio.load(html)
+        const articles = []
+
+        $('.post-title', html).each(function () {
+            const title = $(this).text()
+            const url = $(this).find('a').attr('href')
+            articles.push({
+                title,
+                url
+            })
+        })
+        console.log(articles)
+
+    }).catch(err => console.log(err))
 
 app.listen(PORT, () => console.log(`server running on PORT ${PORT}`))
 
